@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Fodrászat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="reveal-on-scroll">
+        <nav>
+            <a href="#" class="logo">StyleMasters</a>
+            <ul>
+                <li><a href="#services">Árlista</a></li>
+                <li><a href="#booking">Foglalás</a></li>
+                <li><a href="#contact">Kapcsolat</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Szekció -->
+        <section id="hero">
+            <div class="hero-content reveal-on-scroll">
+                <h1>Ahol a stílus életre kel</h1>
+                <p>Prémium szolgáltatások egy modern, barátságos környezetben.</p>
+                <a href="#services" class="cta-button">Foglalj időpontot most!</a>
+            </div>
+            <div class="hero-bg"></div>
+        </section>
+
+        <!-- Árlista Szekció -->
+        <section id="services" class="reveal-on-scroll">
+            <h2>Árlista</h2>
+            <div class="price-cards" id="services-container">
+                <!-- Dynamically loaded from localStorage products -->
+            </div>
+        </section>
+
+        <!-- Foglalás Szekció -->
+        <section id="booking" class="reveal-on-scroll">
+            <h2>Időpontfoglalás</h2>
+            <form class="booking-form">
+                <div class="form-group">
+                    <label for="name">Név</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email cím</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Szolgáltatás</label>
+                    <select id="service" name="service" required>
+                        <option value="">Válassz szolgáltatást...</option>
+                        <option value="ferfi-hajvagas">Férfi hajvágás</option>
+                        <option value="szakalligazitas">Szakálligazítás</option>
+                        <option value="hajfestes">Hajfestés</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Dátum és idő</label>
+                    <input type="datetime-local" id="date" name="date" required>
+                </div>
+                <button type="submit" class="cta-button">Küldés</button>
+            </form>
+        </section>
+    </main>
+
+    <footer id="contact" class="reveal-on-scroll">
+        <p>&copy; 2026 StyleMasters Fodrászat. Minden jog fenntartva.</p>
+        <p>1234 Budapest, Minta utca 5.</p>
+        <p><a href="login.html" class="admin-link">Vállalkozói Belépés</a></p>
+    </footer>
+
+    <script src="script.js?v=2" defer></script>
+</body>
+
+</html>

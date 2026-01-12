@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Felület - Modern Fodrászat</title>
+    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard-body">
+
+    <div class="dashboard-container">
+        <!-- Oldalsáv -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">StyleMasters</a>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#overview-section"><span class="icon">&#9881;</span> <span
+                                class="text">Áttekintés</span></a></li>
+                    <li><a href="#bookings-section"><span class="icon">&#128197;</span> <span
+                                class="text">Foglalások</span></a></li>
+                    <li><a href="#clients-section"><span class="icon">&#128100;</span> <span
+                                class="text">Ügyfelek</span></a></li>
+                    <li><a href="#settings-section"><span class="icon">&#9881;</span> <span
+                                class="text">Beállítások</span></a></li>
+                    <li class="logout-link"><a href="#" id="logout-btn"><span class="icon">&#128682;</span> <span
+                                class="text">Kijelentkezés</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Fő tartalom -->
+        <main class="dashboard-content">
+            <header>
+                <h1>Vállalkozói Admin Felület</h1>
+            </header>
+
+            <!-- Áttekintés Szekció -->
+            <section id="overview-section" class="admin-section">
+                <h2>Áttekintés</h2>
+                <div class="stats-cards">
+                    <div class="card">
+                        <h3>Mai bevétel</h3>
+                        <p class="stat-number">42.500 Ft</p>
+                        <span class="stat-change">+5% tegnaphoz képest</span>
+                    </div>
+                    <div class="card">
+                        <h3>Várakozó vendégek</h3>
+                        <p class="stat-number">3</p>
+                        <span class="stat-change">Mai napon</span>
+                    </div>
+                    <div class="card">
+                        <h3>Teljesített foglalások</h3>
+                        <p class="stat-number">5</p>
+                        <span class="stat-change">Mai napon</span>
+                    </div>
+                </div>
+
+                <!-- Chart Szekció -->
+                <div class="chart-container" style="position: relative; height:40vh; width:100%; margin: 2rem 0;">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <!-- Gyorsmenü -->
+                <h2>Gyorsmenü</h2>
+                <div class="quick-menu">
+                    <button class="btn-quick" id="btn-add-booking-quick">+ Új Foglalás</button>
+                    <button class="btn-quick" id="btn-add-guest-quick">+ Új Vendég</button>
+                    <button class="btn-quick" id="btn-settings-quick">&#9881; Beállítások</button>
+                </div>
+            </section>
+
+            <!-- Foglalások Szekció (alapból látható) -->
+            <section id="bookings-section" class="admin-section">
+                <h2>Mai Foglalások</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vendég</th>
+                                <th>Szolgáltatás</th>
+                                <th>Időpont</th>
+                                <th>Ár</th>
+                                <th>Státusz</th>
+                                <th>Művelet</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            <!-- A sorokat az admin.js fogja dinamikusan betölteni -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Ügyfelek Szekció (rejtett) -->
+            <!-- Ügyfelek Szekció (rejtett) -->
+            <section id="clients-section" class="admin-section hidden">
+                <h2>Ügyfelek</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Név</th>
+                                <th>Email</th>
+                                <th>Utolsó Látogatás</th>
+                                <th>Művelet</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-table-body">
+                            <!-- JS tölti be -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Beállítások Szekció (rejtett) -->
+            <!-- Beállítások Szekció (rejtett) -->
+            <section id="settings-section" class="admin-section hidden">
+                <h2>Beállítások</h2>
+
+                <!-- Shop Settings Card -->
+                <div class="settings-card">
+                    <h3>🏪 Üzlet Adatai</h3>
+                    <form id="settings-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="setting-shopname">Üzlet Neve</label>
+                                <input type="text" id="setting-shopname" name="shopName" placeholder="pl. StyleMasters">
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-currency">Pénznem</label>
+                                <select id="setting-currency" name="currency">
+                                    <option value="Ft">Forint (Ft)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="USD">Dollár ($)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="cta-button">💾 Mentés</button>
+                    </form>
+                </div>
+
+                <!-- Product Management Card -->
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>✂️ Szolgáltatások kezelése</h3>
+                        <button type="button" id="add-product-btn" class="btn-add-product">
+                            <span class="btn-icon">➕</span>
+                            <span class="btn-text">Új szolgáltatás</span>
+                        </button>
+                    </div>
+
+                    <!-- Product List -->
+                    <div id="product-list" class="product-list">
+                        <!-- Dynamically rendered -->
+                    </div>
+
+                    <!-- Add/Edit Product Form (initially hidden) -->
+                    <div id="product-form" class="product-form" style="display: none;">
+                        <input type="hidden" id="product-id">
+                        <div class="form-group">
+                            <label for="product-name">Szolgáltatás neve</label>
+                            <input type="text" id="product-name" placeholder="pl. Borotválás" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Ár (HUF)</label>
+                            <input type="number" id="product-price" placeholder="pl. 3000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-image">Kép (opcionális)</label>
+                            <input type="file" id="product-image" accept="image/*">
+                            <img id="product-image-preview"
+                                style="max-width: 150px; margin-top: 0.5rem; display: none; border-radius: 8px;">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="save-product-btn" class="cta-button">💾 Mentés</button>
+                            <button type="button" id="cancel-product-btn" class="btn">❌ Mégse</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin.js?v=2" defer></script>
+</body>
+
+</html>

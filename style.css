@@ -1,0 +1,1003 @@
+:root {
+    --primary-color: #ffffff;
+    --secondary-color: #f0f0f0;
+    --accent-color: #00c6ff;
+    --gradient-start: #3a1c71;
+    --gradient-mid: #d76d77;
+    --gradient-end: #ffaf7b;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-color);
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+    background-attachment: fixed;
+    line-height: 1.6;
+}
+
+/* Animációk */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transform: translateY(20px);
+}
+
+.reveal-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Navigáció */
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 5%;
+    background: rgba(20, 10, 30, 0.3);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    animation: fadeIn 1s ease-in;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--accent-color);
+}
+
+/* Hero Szekció */
+#hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 0 5%;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1599387737257-6c17b5454b15?w=1600&q=80') no-repeat center center/cover;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.hero-content {
+    animation: slideInUp 1s ease-out;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: var(--accent-color);
+    color: #111;
+    padding: 0.8rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Szekciók Általános Stílusa */
+section {
+    padding: 6rem 5%;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Árlista - Kártyák */
+.price-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card .price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    display: block;
+    margin-top: 1rem;
+}
+
+/* Foglalás Űrlap */
+.booking-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 3rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Footer */
+footer {
+    padding: 2rem 5%;
+    background: rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Reszponzív Design */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+        /* Egyszerűsített nav mobilra */
+    }
+
+    .hero-content h1 {
+        font-size: 2.8rem;
+    }
+
+    section {
+        padding: 4rem 5%;
+    }
+}
+
+/* --- Admin Dashboard Stílusok --- */
+
+.dashboard-body {
+    background: #111827;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Oldalsáv */
+.sidebar {
+    position: fixed;
+    /* Rögzített pozíció */
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    /* Teljes magasság */
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    /* Legyen legfelül */
+}
+
+.sidebar-header {
+    margin-bottom: 3rem;
+}
+
+.sidebar .logo {
+    text-align: center;
+    display: block;
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /* Térköz az ikon és a szöveg között */
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar-nav li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
+}
+
+
+
+/* Kijelentkezés link az aljára */
+.sidebar-nav .logout-link {
+    margin-top: auto;
+}
+
+.sidebar-nav .logout-link a {
+    color: #9ca3af;
+}
+
+.sidebar-nav .logout-link a:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Fő tartalom */
+.dashboard-content {
+    flex-grow: 1;
+    padding: 3rem;
+    overflow-y: auto;
+    margin-left: 250px;
+    /* Hely az oldalsávnak */
+}
+
+.dashboard-content header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Statisztika kártyák */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stats-cards .card {
+    text-align: left;
+}
+
+.stats-cards .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.stats-cards .stat-change {
+    color: #9ca3af;
+}
+
+/* Táblázat */
+.table-wrapper {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--secondary-color);
+}
+
+th,
+td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+thead th {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+tbody tr {
+    transition: background 0.3s;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Státusz címkék */
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.status-confirmed {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.status-waiting {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.status-rejected {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+/* Művelet gombok */
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin: 0 0.25rem;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.2);
+}
+
+.btn-accept {
+    color: #10b981;
+}
+
+.btn-reject {
+    color: #ef4444;
+}
+
+/* Sor eltűnés animáció */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.row-fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+/* Utility osztályok */
+.hidden {
+    display: none !important;
+}
+
+/* Footer Admin Link */
+.admin-link {
+    color: #9ca3af;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.admin-link:hover {
+    color: var(--primary-color);
+}
+
+/* --- Login oldal stílusok --- */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.login-container .booking-form {
+    width: 100%;
+    max-width: 450px;
+}
+
+.error-message {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 0.75rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.back-link a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.back-link a:hover {
+    color: var(--accent-color);
+}
+
+
+
+/* Gyorsmenü */
+.quick-menu {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-quick {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--primary-color);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-quick:hover {
+    background: var(--accent-color);
+    color: #111;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3);
+}
+
+/* Chart Container */
+.chart-container {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+/* Sidebar Navigation Active State Fix */
+
+
+/* --- NEW SIDEBAR LOGIC (Flexbox) --- */
+.sidebar {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    /* Crucial for clipping */
+    white-space: nowrap;
+    z-index: 100;
+}
+
+/* Collapsed State Container */
+.sidebar.collapsed {
+    width: 60px;
+}
+
+/* Header / Logo */
+.sidebar-header {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 70px;
+    /* Fixed height to match collapsed alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--accent-color), #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity 0.3s;
+}
+
+.sidebar.collapsed .logo {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+    /* Removed from flow so it doesn't push width */
+}
+
+/* Navigation List */
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.sidebar-nav ul li {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+/* Navigation Link (The Button) */
+.sidebar-nav ul li a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    /* Fills the Li */
+    box-sizing: border-box;
+    /* Includes padding in width */
+    height: 50px;
+}
+
+/* Active State */
+.sidebar-nav ul li.active {
+    /* Apply background to LI to ensure full width fill */
+    background: rgba(255, 255, 255, 0.1);
+    border-left: 4px solid var(--accent-color);
+}
+
+.sidebar-nav ul li.active a {
+    color: var(--accent-color);
+}
+
+.sidebar-nav ul li:hover a {
+    color: var(--accent-color);
+    padding-left: 2rem;
+    /* Slide effect only when open */
+}
+
+/* Icon Handling */
+.sidebar .icon {
+    min-width: 40px;
+    /* Fixed width for alignment */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+/* Text Handling */
+.sidebar .text {
+    margin-left: 10px;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+/* --- COLLAPSED STATE LOGIC --- */
+/* Per spec: Icons ALWAYS visible, only TEXT hidden */
+
+/* Hide ONLY the text spans when collapsed */
+.sidebar.collapsed .sidebar-nav ul li a .text {
+    display: none !important;
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+/* Ensure icons remain visible and centered */
+.sidebar.collapsed .sidebar-nav ul li a .icon {
+    display: flex !important;
+    min-width: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar.collapsed .sidebar-nav ul li a {
+    justify-content: center;
+    /* Center the icon */
+    padding: 1rem 0;
+    /* Remove horizontal padding */
+}
+
+.sidebar.collapsed .sidebar-nav ul li:hover a {
+    padding-left: 0;
+    /* Disable slide effect in collapsed mode */
+}
+
+/* Ensure Logo disappears or is replaced by small icon? 
+   For now, we just hide the text logo. 
+   Optionally could add a mini logo. */
+
+.sidebar.collapsed~.dashboard-content {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed~.dashboard-content {
+    margin-left: 60px;
+    transition: margin-left 0.3s ease;
+}
+
+.dashboard-content {
+    transition: margin-left 0.3s ease;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: rgba(17, 24, 39, 0.95);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    min-width: 250px;
+}
+
+.toast.success {
+    border-left-color: #2ecc71;
+}
+
+.toast.error {
+    border-left-color: #e74c3c;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+/* Product Management UI Enhancements */
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.product-item:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 198, 255, 0.2);
+}
+
+.product-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.product-item .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.product-item .btn:hover {
+    background: var(--accent-color);
+    color: #111;
+    transform: scale(1.1);
+}
+
+.product-form {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-form input[type="file"] {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.product-form input[type="file"]:hover {
+    border-color: var(--accent-color);
+}
+
+#product-image-preview {
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 198, 255, 0.3);
+}
+
+/* Settings Section Layout */
+.settings-card {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.settings-card h3 {
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+    margin-bottom: 0;
+}
+
+/* Styled Add Product Button */
+.btn-add-product {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--accent-color), #00a8e8);
+    color: #111;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
+}
+
+.btn-add-product:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 198, 255, 0.5);
+    background: linear-gradient(135deg, #00d4ff, #00c6ff);
+}
+
+.btn-add-product:active {
+    transform: translateY(-1px);
+}
+
+.btn-add-product .btn-icon {
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.btn-add-product .btn-text {
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.product-form {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+}
