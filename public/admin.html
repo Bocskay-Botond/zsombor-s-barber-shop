@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Zsombor's Barber Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="/" class="logo">✂ <span class="logo-text">Zsombor's</span></a>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="active" data-section="overview">
+          <a href="#"><span class="nav-icon">📊</span><span class="nav-text">Áttekintés</span></a>
+        </li>
+        <li data-section="bookings">
+          <a href="#"><span class="nav-icon">📅</span><span class="nav-text">Foglalások</span></a>
+        </li>
+        <li data-section="services">
+          <a href="#"><span class="nav-icon">✂</span><span class="nav-text">Szolgáltatások</span></a>
+        </li>
+        <li data-section="hours">
+          <a href="#"><span class="nav-icon">🕐</span><span class="nav-text">Munkaidő</span></a>
+        </li>
+        <li data-section="settings">
+          <a href="#"><span class="nav-icon">⚙️</span><span class="nav-text">Beállítások</span></a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" id="logout-btn"><span>🚪</span><span>Kijelentkezés</span></a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <header class="dashboard-header">
+      <h1 id="section-title">Áttekintés</h1>
+      <div style="font-size:0.85rem;color:var(--text-muted)">
+        Bejelentkezve: <strong id="admin-username"></strong>
+      </div>
+    </header>
+
+    <!-- ── Overview ────────────────────────────────────────────────────── -->
+    <section class="admin-section active" id="section-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Mai bevétel</div>
+          <div class="stat-value" id="stat-revenue">–</div>
+          <div class="stat-sub">Megerősített foglalásokból</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Várakozó foglalások</div>
+          <div class="stat-value" id="stat-pending">–</div>
+          <div class="stat-sub">Visszaigazolásra vár</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Mai megerősítések</div>
+          <div class="stat-value" id="stat-confirmed">–</div>
+          <div class="stat-sub">Ma teljesítve</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Heti bevétel (Ft)</h3>
+        <div class="chart-wrapper"><canvas id="revenue-chart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ── Bookings ────────────────────────────────────────────────────── -->
+    <section class="admin-section" id="section-bookings">
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>Foglalások</h3>
+          <div class="filter-bar">
+            <input type="date" id="bookings-date-filter" style="width:160px">
+            <select id="bookings-status-filter" style="width:140px">
+              <option value="">Minden státusz</option>
+              <option value="pending">Várakozó</option>
+              <option value="confirmed">Megerősített</option>
+              <option value="rejected">Elutasított</option>
+            </select>
+            <button class="btn btn-sm btn-primary" id="bookings-filter-btn">Szűrés</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Vendég</th>
+                <th>Email</th>
+                <th>Telefon</th>
+                <th>Szolgáltatás</th>
+                <th>Dátum</th>
+                <th>Időpont</th>
+                <th>Ár</th>
+                <th>Státusz</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+              <tr class="loading-row"><td colspan="9"><span class="loading-spinner"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Services ────────────────────────────────────────────────────── -->
+    <section class="admin-section" id="section-services">
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3>Szolgáltatások</h3>
+          <button class="btn btn-primary btn-sm" id="add-service-btn">+ Új szolgáltatás</button>
+        </div>
+        <div style="padding:1rem" id="services-list">
+          <div class="loading-row" style="text-align:center;padding:1rem"><span class="loading-spinner"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Working Hours ───────────────────────────────────────────────── -->
+    <section class="admin-section" id="section-hours">
+      <div class="settings-card">
+        <h3>Munkaidő beállítása</h3>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.5rem">
+          Állítsd be melyik napokon és mikor dolgozol. A foglalási naptár ennek alapján mutatja a szabad időpontokat.
+        </p>
+        <div id="working-hours-form">
+          <div class="loading-row" style="text-align:center;padding:1rem"><span class="loading-spinner"></span></div>
+        </div>
+        <button class="btn btn-primary" id="save-hours-btn" style="margin-top:1.5rem">💾 Munkaidő mentése</button>
+      </div>
+    </section>
+
+    <!-- ── Settings ────────────────────────────────────────────────────── -->
+    <section class="admin-section" id="section-settings">
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3>🏪 Üzlet adatai</h3>
+          <div class="settings-form-grid">
+            <div class="form-group">
+              <label>Üzlet neve</label>
+              <input type="text" id="s-shop-name" placeholder="Pl. Zsombor's Barber Shop">
+            </div>
+            <div class="form-group">
+              <label>Cím</label>
+              <input type="text" id="s-address" placeholder="1234 Budapest, Minta utca 5.">
+            </div>
+            <div class="form-group">
+              <label>Telefonszám</label>
+              <input type="tel" id="s-phone" placeholder="+36 20 123 4567">
+            </div>
+            <div class="form-group">
+              <label>Időpont sűrűsége (perc)</label>
+              <select id="s-slot-duration">
+                <option value="15">15 perc</option>
+                <option value="30">30 perc</option>
+                <option value="60">60 perc</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="save-settings-btn">💾 Mentés</button>
+        </div>
+
+        <div class="settings-card">
+          <h3>🔒 Jelszó módosítása</h3>
+          <div class="settings-form-grid">
+            <div class="form-group">
+              <label>Jelenlegi jelszó</label>
+              <input type="password" id="s-cur-pass">
+            </div>
+            <div class="form-group">
+              <label>Új jelszó</label>
+              <input type="password" id="s-new-pass">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="save-password-btn">🔑 Jelszó módosítása</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Service Modal -->
+<div class="modal-overlay" id="service-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Új szolgáltatás</h3>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <input type="hidden" id="m-service-id">
+    <div class="modal-form-group">
+      <div class="form-group"><label>Neve *</label><input type="text" id="m-name" placeholder="Pl. Hajvágás"></div>
+    </div>
+    <div class="modal-form-group">
+      <div class="form-group"><label>Leírás</label><input type="text" id="m-desc" placeholder="Rövid leírás"></div>
+    </div>
+    <div class="modal-form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form-group"><label>Ár (Ft) *</label><input type="number" id="m-price" placeholder="5000"></div>
+      <div class="form-group"><label>Időtartam (perc) *</label><input type="number" id="m-duration" placeholder="30"></div>
+    </div>
+    <div class="modal-form-group">
+      <div class="form-group"><label>Kép URL (opcionális)</label><input type="url" id="m-image" placeholder="https://..."></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modal-cancel">Mégse</button>
+      <button class="btn btn-primary" id="modal-save">💾 Mentés</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

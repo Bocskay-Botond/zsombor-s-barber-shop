@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zsombor's Barber Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="#" class="logo" id="shop-name-nav">Zsombor's Barber Shop</a>
+    <ul class="nav-links">
+      <li><a href="#services">Szolgáltatások</a></li>
+      <li><a href="#booking">Foglalás</a></li>
+      <li><a href="#contact">Kapcsolat</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content reveal">
+      <h1>Ahol a stílus<br><span class="hero-accent">életre kel</span></h1>
+      <p>Prémium fodrász szolgáltatások. Foglalj időpontot online, valós idejű naptárral.</p>
+      <a href="#booking" class="btn btn-primary" style="font-size:1rem;padding:0.85rem 2rem;">Időpontot foglalok</a>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="section">
+      <div class="section-header reveal">
+        <h2>Szolgáltatásaink</h2>
+        <p>Kattints egy szolgáltatásra és azonnal ugrunk a foglaláshoz</p>
+      </div>
+      <div class="services-grid reveal" id="services-grid">
+        <div class="service-card">
+          <div class="service-card-placeholder">✂</div>
+          <div class="service-card-body">
+            <h3>Betöltés...</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking + Calendar -->
+  <section id="booking">
+    <div class="booking-container">
+      <div class="section-header reveal">
+        <h2>Időpontfoglalás</h2>
+        <p>Válassz egy szabad (zöld) időpontot a naptárban, majd töltsd ki az adataidat</p>
+      </div>
+
+      <!-- Week Calendar -->
+      <div class="calendar-wrapper reveal">
+        <div class="calendar-nav">
+          <button class="btn btn-sm" id="prev-week">&#8592; Előző hét</button>
+          <h3 id="week-label">Betöltés...</h3>
+          <button class="btn btn-sm" id="next-week">Következő hét &#8594;</button>
+        </div>
+        <div class="week-grid" id="week-grid">
+          <!-- JS renders columns here -->
+        </div>
+        <div class="calendar-legend">
+          <div class="legend-item"><div class="legend-dot available"></div> Szabad</div>
+          <div class="legend-item"><div class="legend-dot booked"></div> Foglalt</div>
+          <div class="legend-item"><div class="legend-dot selected"></div> Kiválasztva</div>
+        </div>
+      </div>
+
+      <!-- Selected slot info -->
+      <div class="selected-slot-display" id="selected-slot-display">
+        <span>📅</span>
+        <span class="slot-info" id="selected-slot-info"></span>
+        <button class="btn btn-sm" id="clear-slot-btn" style="margin-left:auto">✕ Töröl</button>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="booking-form-card reveal">
+        <h3>Adataid megadása</h3>
+        <div class="booking-form-grid">
+          <div class="form-group">
+            <label for="b-name">Teljes neved *</label>
+            <input type="text" id="b-name" placeholder="Pl. Kovács Péter" required>
+          </div>
+          <div class="form-group">
+            <label for="b-email">Email cím *</label>
+            <input type="email" id="b-email" placeholder="pelda@email.hu" required>
+          </div>
+          <div class="form-group">
+            <label for="b-phone">Telefonszám</label>
+            <input type="tel" id="b-phone" placeholder="+36 20 123 4567">
+          </div>
+          <div class="form-group">
+            <label for="b-service">Szolgáltatás *</label>
+            <select id="b-service" required>
+              <option value="">Válassz...</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Kiválasztott időpont</label>
+          <input type="text" id="b-datetime-display" readonly placeholder="Kattints egy zöld időpontra a naptárban">
+        </div>
+        <input type="hidden" id="b-date">
+        <input type="hidden" id="b-time">
+        <button class="btn btn-primary" id="book-btn" style="padding:0.75rem 2rem">
+          Foglalás elküldése
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-inner">
+    <p id="shop-name-footer" style="font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:0.8rem"></p>
+    <p id="shop-address">&#128205; 1234 Budapest, Minta utca 5.</p>
+    <p id="shop-phone" style="margin-top:0.3rem">📞 +36 20 123 4567</p>
+    <p style="margin-top:1rem;font-size:0.8rem">&copy; 2026 Minden jog fenntartva.</p>
+    <a href="/login" class="footer-admin-link">Vállalkozói belépés &#8594;</a>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

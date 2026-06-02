@@ -1,0 +1,6 @@
+node_modules/
+barber.db
+barber.db-shm
+barber.db-wal
+*.db
+.env
