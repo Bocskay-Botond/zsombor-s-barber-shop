@@ -15,13 +15,27 @@ async function api(method, url, body) {
   return r;
 }
 
+/* ── Escape (XSS-safe rendering) ──────────────────────────────────────────── */
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* ── Toast ────────────────────────────────────────────────────────────────── */
 function showToast(msg, type = 'info') {
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
   const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-  t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  const icon = document.createElement('span');
+  icon.textContent = icons[type] || 'ℹ️';
+  const text = document.createElement('span');
+  text.textContent = msg;
+  t.append(icon, text);
   c.appendChild(t);
   setTimeout(() => t.remove(), 3200);
 }
@@ -125,12 +139,12 @@ async function loadBookings() {
       const badgeClass = { pending: 'badge-pending', confirmed: 'badge-confirmed', rejected: 'badge-rejected' }[b.status] || '';
       const badgeText = { pending: 'Várakozó', confirmed: 'Megerősített', rejected: 'Elutasított' }[b.status] || b.status;
       return `<tr data-id="${b.id}">
-        <td><strong>${b.guest_name}</strong></td>
-        <td>${b.email}</td>
-        <td>${b.phone || '–'}</td>
-        <td>${b.service_name}</td>
-        <td>${b.booking_date}</td>
-        <td>${b.booking_time}</td>
+        <td><strong>${escapeHtml(b.guest_name)}</strong></td>
+        <td>${escapeHtml(b.email)}</td>
+        <td>${escapeHtml(b.phone) || '–'}</td>
+        <td>${escapeHtml(b.service_name)}</td>
+        <td>${escapeHtml(b.booking_date)}</td>
+        <td>${escapeHtml(b.booking_time)}</td>
         <td>${b.price.toLocaleString('hu-HU')} Ft</td>
         <td><span class="badge ${badgeClass}">${badgeText}</span></td>
         <td>
@@ -187,8 +201,8 @@ async function loadServices() {
     container.innerHTML = services.map(s => `
       <div class="service-list-item" data-id="${s.id}">
         <div class="service-list-info">
-          <strong>${s.name}</strong>
-          <span>${s.description || ''} · ${s.duration_minutes} perc · ${s.active ? '✅ Aktív' : '❌ Inaktív'}</span>
+          <strong>${escapeHtml(s.name)}</strong>
+          <span>${escapeHtml(s.description || '')} · ${s.duration_minutes} perc · ${s.active ? '✅ Aktív' : '❌ Inaktív'}</span>
         </div>
         <div class="service-list-price">${s.price.toLocaleString('hu-HU')} Ft</div>
         <button class="btn btn-sm" data-action="edit" data-id="${s.id}">✏️</button>
@@ -229,6 +243,7 @@ function openServiceModal(svc) {
   document.getElementById('m-price').value = svc ? svc.price : '';
   document.getElementById('m-duration').value = svc ? svc.duration_minutes : '30';
   document.getElementById('m-image').value = svc ? svc.image_url : '';
+  document.getElementById('m-active').checked = svc ? !!svc.active : true;
   document.getElementById('service-modal').classList.add('open');
 }
 
@@ -245,7 +260,7 @@ document.getElementById('modal-save').addEventListener('click', async () => {
     price: parseInt(document.getElementById('m-price').value),
     duration_minutes: parseInt(document.getElementById('m-duration').value),
     image_url: document.getElementById('m-image').value.trim(),
-    active: 1
+    active: document.getElementById('m-active').checked ? 1 : 0
   };
 
   if (!body.name || !body.price || !body.duration_minutes) {
@@ -346,7 +361,7 @@ document.getElementById('save-password-btn').addEventListener('click', async () 
   const curPass = document.getElementById('s-cur-pass').value;
   const newPass = document.getElementById('s-new-pass').value;
   if (!curPass || !newPass) { showToast('Töltsd ki mindkét mezőt!', 'error'); return; }
-  if (newPass.length < 6) { showToast('Az új jelszó legalább 6 karakter legyen!', 'error'); return; }
+  if (newPass.length < 8) { showToast('Az új jelszó legalább 8 karakter legyen!', 'error'); return; }
 
   const r = await api('PUT', '/api/admin/password', { current_password: curPass, new_password: newPass });
   const d = await r.json();

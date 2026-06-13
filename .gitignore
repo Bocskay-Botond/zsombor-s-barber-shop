@@ -4,3 +4,4 @@ barber.db-shm
 barber.db-wal
 *.db
 .env
+.jwtsecret

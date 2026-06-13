@@ -1,5 +1,6 @@
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const path = require('path');
 
 const db = new Database(path.join(__dirname, 'barber.db'));
@@ -49,6 +50,11 @@ db.exec(`
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL
   );
+
+  -- Backstop: two active (non-rejected) bookings can never claim the same slot.
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_bookings_active_slot
+    ON bookings(booking_date, booking_time)
+    WHERE status != 'rejected';
 `);
 
 // Seed data only if tables are empty
@@ -89,8 +95,19 @@ if (settingCount === 0) {
 
 const adminCount = db.prepare('SELECT COUNT(*) as c FROM admin_users').get().c;
 if (adminCount === 0) {
-  const hash = bcrypt.hashSync('admin123', 10);
+  // Use ADMIN_PASSWORD env if provided (min 6 chars), otherwise generate a random one.
+  const envPass = (process.env.ADMIN_PASSWORD || '').trim();
+  const initialPassword = envPass.length >= 8 ? envPass : crypto.randomBytes(8).toString('hex'); // 16 hex chars
+  const hash = bcrypt.hashSync(initialPassword, 10);
   db.prepare('INSERT INTO admin_users (username, password_hash) VALUES (?, ?)').run('admin', hash);
+
+  const line = '='.repeat(64);
+  console.log('\n' + line);
+  console.log('  ELSŐ INDÍTÁS — admin fiók létrehozva');
+  console.log('  Felhasználónév: admin');
+  console.log('  Jelszó:         ' + initialPassword);
+  console.log('  >> Jelentkezz be (/login) és változtasd meg a jelszót a Beállításoknál! <<');
+  console.log(line + '\n');
 }
 
 module.exports = db;
