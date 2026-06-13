@@ -1,10 +1,23 @@
 /* ── Utilities ────────────────────────────────────────────────────────────── */
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function showToast(msg, type = 'info') {
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
   const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-  t.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${msg}</span>`;
+  const icon = document.createElement('span');
+  icon.textContent = icons[type] || 'ℹ️';
+  const text = document.createElement('span');
+  text.textContent = msg;
+  t.append(icon, text);
   c.appendChild(t);
   setTimeout(() => t.remove(), 3200);
 }
@@ -36,7 +49,12 @@ function addDays(date, n) {
 }
 
 function toDateStr(date) {
-  return date.toISOString().slice(0, 10);
+  // Local date (not UTC) — avoids an off-by-one for positive-UTC-offset zones,
+  // which would otherwise shift the requested week and the "today" highlight.
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 const DAY_NAMES = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'];
@@ -82,12 +100,12 @@ function renderServiceCards() {
   grid.innerHTML = services.map(s => `
     <div class="service-card" data-id="${s.id}" data-duration="${s.duration_minutes}">
       ${s.image_url
-        ? `<img src="${s.image_url}" alt="${s.name}" onerror="this.parentElement.querySelector('.service-card-placeholder')?.style&&(this.style.display='none')">`
+        ? `<img class="service-card-img" src="${escapeHtml(s.image_url)}" alt="${escapeHtml(s.name)}">`
         : `<div class="service-card-placeholder">✂</div>`
       }
       <div class="service-card-body">
-        <h3>${s.name}</h3>
-        <p>${s.description || 'Professzionális szolgáltatás prémium minőségben.'}</p>
+        <h3>${escapeHtml(s.name)}</h3>
+        <p>${escapeHtml(s.description || 'Professzionális szolgáltatás prémium minőségben.')}</p>
         <div class="service-meta">
           <span class="service-price">${s.price.toLocaleString('hu-HU')} Ft</span>
           <span class="service-duration">⏱ ${s.duration_minutes} perc</span>
@@ -95,6 +113,16 @@ function renderServiceCards() {
       </div>
     </div>
   `).join('');
+
+  // Image load-failure fallback (CSP-safe: no inline event handlers)
+  grid.querySelectorAll('img.service-card-img').forEach(img => {
+    img.addEventListener('error', () => {
+      const ph = document.createElement('div');
+      ph.className = 'service-card-placeholder';
+      ph.textContent = '✂';
+      img.replaceWith(ph);
+    });
+  });
 
   document.querySelectorAll('.service-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -112,7 +140,7 @@ function renderServiceCards() {
 function populateServiceSelect() {
   const sel = document.getElementById('b-service');
   sel.innerHTML = '<option value="">Válassz szolgáltatást...</option>' +
-    services.map(s => `<option value="${s.id}">${s.name} — ${s.price.toLocaleString('hu-HU')} Ft (${s.duration_minutes} perc)</option>`).join('');
+    services.map(s => `<option value="${s.id}">${escapeHtml(s.name)} — ${s.price.toLocaleString('hu-HU')} Ft (${s.duration_minutes} perc)</option>`).join('');
 
   sel.addEventListener('change', () => {
     selectedServiceId = parseInt(sel.value) || null;
