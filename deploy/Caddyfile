@@ -1,0 +1,7 @@
+# Replace zsomborbarber.duckdns.org with YOUR domain (e.g. a free DuckDNS subdomain
+# pointing to this VM's public IP). Caddy automatically obtains and renews a free
+# Let's Encrypt HTTPS certificate for it — no extra config needed.
+
+zsomborbarber.duckdns.org {
+    reverse_proxy localhost:3000
+}

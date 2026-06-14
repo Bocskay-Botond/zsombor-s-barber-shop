@@ -1,0 +1,20 @@
+[Unit]
+Description=Zsombor's Barber Shop (Node.js)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/zsombor-s-barber-shop
+# Loads PORT, JWT_SECRET, TRUST_PROXY, (optional) ADMIN_PASSWORD
+EnvironmentFile=/home/ubuntu/zsombor-s-barber-shop/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+# Light hardening
+NoNewPrivileges=true
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

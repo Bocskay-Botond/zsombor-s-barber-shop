@@ -80,6 +80,11 @@ Mielőtt az ügyfél éles forgalomban használja:
 5. **Üzlet adatai** — töltsd ki a valós nevet, címet, telefonszámot és szolgáltatásokat
    az admin Beállítások / Szolgáltatások / Munkaidő menükben.
 
+### Publikálás a webre (ingyen)
+Részletes, lépésről-lépésre útmutató egy ingyenes, perzisztens Oracle Cloud VM-re
+(valódi HTTPS-sel): lásd [`DEPLOY.md`](DEPLOY.md). A `deploy/` mappa kész systemd
+service-t, Caddy konfigot és egy `setup.sh` telepítőt tartalmaz.
+
 ## Beépített biztonsági védelmek
 
 - **Bejelentkezés:** JWT (8 órás lejárat), bcrypt-elt jelszavak (min. 8 karakter), rate-limit (10 próbálkozás / 15 perc / IP).
