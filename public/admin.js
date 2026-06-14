@@ -71,6 +71,15 @@ document.getElementById('logout-btn').addEventListener('click', e => {
   window.location.href = '/login';
 });
 
+// Mobile: logout button relocated into the header (bottom tab bar hides the footer)
+const topLogout = document.getElementById('logout-btn-top');
+if (topLogout) topLogout.addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.removeItem('bb_token');
+  localStorage.removeItem('bb_user');
+  window.location.href = '/login';
+});
+
 /* ── Overview / Stats ─────────────────────────────────────────────────────── */
 let chartInstance = null;
 

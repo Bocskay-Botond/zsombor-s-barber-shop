@@ -78,12 +78,13 @@ input[type="time"], select, textarea {
   border-radius: 6px;
   color: var(--text);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 16px; /* 16px min: prevents iOS Safari auto-zoom on focus */
   transition: border-color var(--transition);
 }
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.35);
 }
 select option { background: var(--bg2); }
 
@@ -348,7 +349,7 @@ select option { background: var(--bg2); }
 
 /* ── Dashboard Main ──────────────────────────────────────────────────────── */
 .dashboard-main {
-  margin-left: 240px; flex: 1;
+  margin-left: 240px; flex: 1; min-width: 0; /* min-width:0 lets the flex child shrink instead of overflowing */
   background: var(--bg); min-height: 100vh;
 }
 .dashboard-header {
@@ -358,6 +359,7 @@ select option { background: var(--bg2); }
   position: sticky; top: 0; z-index: 10;
 }
 .dashboard-header h1 { font-size: 1.3rem; }
+.dashboard-header-right { display: flex; align-items: center; gap: 0.75rem; }
 .admin-section { display: none; padding: 2rem; }
 .admin-section.active { display: block; }
 
@@ -389,8 +391,8 @@ select option { background: var(--bg2); }
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
 }
 .table-card-header h3 { font-size: 1rem; }
-.table-wrapper { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 760px; border-collapse: collapse; }
 thead th {
   padding: 0.75rem 1rem; text-align: left;
   font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);
@@ -440,6 +442,7 @@ input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent);
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.7);
   z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
   opacity: 0; pointer-events: none; transition: opacity var(--transition);
 }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -452,7 +455,11 @@ input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent);
 .modal-overlay.open .modal { transform: scale(1); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
 .modal-header h3 { font-size: 1.1rem; }
-.modal-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.3rem; }
+.modal-close {
+  background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.3rem;
+  width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;
+  margin: -0.5rem -0.5rem -0.5rem 0;
+}
 .modal-close:hover { color: var(--text); }
 .modal-form-group { margin-bottom: 1rem; }
 .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
@@ -462,8 +469,24 @@ input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent);
 .loading-spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 900px) {
+/* ── Mobile nav toggle (hamburger) — hidden on desktop ───────────────────── */
+.nav-toggle {
+  display: none; background: none; border: 0; cursor: pointer;
+  width: 40px; height: 40px; flex-direction: column; justify-content: center; gap: 5px; padding: 8px;
+}
+.nav-toggle span {
+  display: block; height: 2px; width: 24px; background: var(--accent);
+  border-radius: 2px; transition: transform .25s ease, opacity .25s ease;
+}
+
+/* ── Touch affordances (active feedback for non-hover devices) ───────────── */
+.service-card:active { transform: translateY(-2px); border-color: var(--accent); }
+.slot-btn.available:active { background: var(--success); color: #fff; }
+
+/* ══ Responsive ══════════════════════════════════════════════════════════ */
+
+/* Tablet (769–900px): admin sidebar shrinks to an icon rail */
+@media (min-width: 769px) and (max-width: 900px) {
   .sidebar { width: 60px; }
   .sidebar .nav-text, .sidebar-logo .logo-text, .sidebar-footer span { display: none; }
   .sidebar-logo { padding: 1rem; text-align: center; }
@@ -472,8 +495,132 @@ input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent);
   .sidebar-nav .nav-icon { width: auto; }
   .week-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ≤768px: mobile nav patterns — hamburger menu + admin bottom tab bar */
+@media (max-width: 768px) {
+  /* main header → hamburger dropdown */
+  .nav-toggle { display: flex; }
+  .nav-links {
+    position: absolute; top: 64px; left: 0; right: 0;
+    flex-direction: column; gap: 0; list-style: none; padding: 0;
+    background: rgba(15,15,15,0.98); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    max-height: 0; overflow: hidden; transition: max-height .3s ease;
+  }
+  .nav-links.open { max-height: 280px; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: 1rem 2rem; font-size: 1rem; border-top: 1px solid var(--border); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* keep the calendar readable in the 601–768px band (rail block no longer covers it) */
+  .week-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* admin sidebar → fixed bottom tab bar */
+  .admin-layout { display: block; }
+  .sidebar {
+    position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+    width: 100%; min-height: 0; height: 60px;
+    flex-direction: row; align-items: stretch;
+    border-right: 0; border-top: 1px solid var(--border);
+    z-index: 60; transition: none;
+  }
+  .sidebar-logo, .sidebar-footer { display: none; }
+  .sidebar-nav { flex: 1; padding: 0; }
+  .sidebar-nav ul { display: flex; height: 100%; }
+  .sidebar-nav li { flex: 1; }
+  .sidebar-nav li a {
+    flex-direction: column; gap: 2px; justify-content: center;
+    height: 100%; padding: 6px 2px;
+    border-left: 0; border-top: 3px solid transparent; font-size: 0;
+  }
+  .sidebar-nav li.active a { border-left: 0; border-top-color: var(--accent); background: rgba(201,168,76,0.07); }
+  .sidebar-nav .nav-icon { font-size: 1.25rem; width: auto; }
+  .sidebar-nav .nav-text { display: block; font-size: 0.62rem; line-height: 1; }
+  .dashboard-main { margin-left: 0; padding-bottom: 72px; overflow-x: hidden; }
+
+  /* logout relocates to the header (bottom-bar hides the footer logout) */
+  #logout-btn-top { display: inline-flex !important; }
+  .dashboard-header-right span { display: none; }
+
+  /* toasts must clear the bottom tab bar (admin pages only) */
+  .admin-layout ~ .toast-container { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ≤600px: phone layout — padding, touch targets, stacking */
 @media (max-width: 600px) {
+  /* calendar → 2 cols, tappable slots */
   .week-grid { grid-template-columns: repeat(2, 1fr); }
-  .nav-links { gap: 1rem; }
-  .wh-row { grid-template-columns: 1fr 1fr; }
+  .slot-btn { min-height: 44px; padding: 0.6rem 0.4rem; font-size: 0.85rem; }
+  .day-slots { gap: 0.4rem; }
+
+  /* small buttons become real tap targets */
+  .btn-sm { min-height: 40px; padding: 0.45rem 0.8rem; }
+  .actions-cell { gap: 0.6rem; flex-wrap: nowrap; }
+  .actions-cell .btn-sm { min-width: 40px; min-height: 40px; padding: 0.5rem; justify-content: center; }
+
+  /* reclaim side padding on small screens */
+  .section { padding: 3rem 1rem; }
+  .booking-container { padding: 3rem 1rem; }
+  .admin-section { padding: 1.25rem 1rem; }
+  .dashboard-header { padding: 1rem; gap: 0.5rem; }
+  .dashboard-header h1 { font-size: 1.1rem; min-width: 0; }
+  .site-footer { padding: 2rem 1rem; }
+  .hero-content { padding: 1.5rem 1rem; }
+
+  /* filter bar stacks full-width */
+  .filter-bar { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+  #bookings-date-filter, #bookings-status-filter { width: 100% !important; }
+  .filter-bar .btn { width: 100%; justify-content: center; }
+
+  /* working-hours row: day + toggle on their own rows, then the two time
+     inputs side-by-side in DOM order (start | end) so they never clip */
+  .wh-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 1rem; padding: 1rem 0;
+  }
+  .wh-day { grid-column: 1 / -1; }
+  .wh-toggle { grid-column: 1 / -1; }
+  .wh-row .form-group input { min-width: 0; }
+
+  /* modal fills the small screen comfortably */
+  .modal { padding: 1.5rem; max-width: 100%; }
+  .modal-actions { flex-direction: column-reverse; }
+  .modal-actions .btn { width: 100%; justify-content: center; min-height: 44px; }
+
+  /* settings / stats grids stack; save buttons full-width */
+  .settings-form-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  .settings-card, .stat-card { padding: 1.25rem; }
+  #save-settings-btn, #save-password-btn, #save-hours-btn { width: 100%; justify-content: center; }
+
+  /* table-card header stacks */
+  .table-card-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  #add-service-btn { width: 100%; justify-content: center; }
+
+  /* service list rows wrap */
+  .service-list-item { flex-wrap: wrap; gap: 0.5rem; }
+  .service-list-info { flex: 1 1 100%; }
+  .service-list-price { margin-right: auto; }
+  .service-list-item .btn-sm { min-width: 40px; min-height: 40px; justify-content: center; }
+
+  /* toasts full-width with gutters */
+  .toast-container { left: 0.75rem; right: 0.75rem; align-items: stretch; }
+  .toast { max-width: none; }
+
+  /* chart + hero density */
+  .chart-wrapper { height: 200px; }
+  .chart-card { padding: 1rem; }
+  #hero { min-height: 80vh; }
+  #hero::before { font-size: 12rem; }
+
+  /* login card breathing room */
+  .login-card { padding: 1.75rem; margin: 0 1rem; }
+}
+
+/* ≤480px: small phones — header padding + logo shrink */
+@media (max-width: 480px) {
+  .site-header { padding: 0 1rem; }
+  .logo { font-size: 1.05rem; letter-spacing: 0.02em; }
 }

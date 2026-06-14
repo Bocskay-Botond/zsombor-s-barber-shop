@@ -47,8 +47,9 @@
   <main class="dashboard-main">
     <header class="dashboard-header">
       <h1 id="section-title">Áttekintés</h1>
-      <div style="font-size:0.85rem;color:var(--text-muted)">
-        Bejelentkezve: <strong id="admin-username"></strong>
+      <div class="dashboard-header-right">
+        <span style="font-size:0.85rem;color:var(--text-muted)">Bejelentkezve: <strong id="admin-username"></strong></span>
+        <a href="#" id="logout-btn-top" class="btn btn-sm" style="display:none" aria-label="Kijelentkezés">🚪</a>
       </div>
     </header>
 
@@ -83,8 +84,8 @@
         <div class="table-card-header">
           <h3>Foglalások</h3>
           <div class="filter-bar">
-            <input type="date" id="bookings-date-filter" style="width:160px">
-            <select id="bookings-status-filter" style="width:140px">
+            <input type="date" id="bookings-date-filter">
+            <select id="bookings-status-filter">
               <option value="">Minden státusz</option>
               <option value="pending">Várakozó</option>
               <option value="confirmed">Megerősített</option>
